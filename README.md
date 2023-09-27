@@ -21,6 +21,10 @@
 # Pré-requisitos
   - .NET 7 instalado (https://dotnet.microsoft.com/en-us/download/dotnet)
   - Visual Studio ( https://visualstudio.microsoft.com/pt-br/vs/community/ )
+  - MySQL: Esta aplicação utiliza o banco de dados MySQL para armazenar as informações. Certifique-se de ter o MySQL instalado e configurado em seu sistema. Você pode baixar o MySQL em https://dev.mysql.com/downloads/ e seguir as instruções de instalação.
+
+# Configuração do Banco de Dados
+- Antes de executar a aplicação, você precisará criar um banco de dados MySQL e configurar as informações de conexão no arquivo de configuração do ASP.NET Core (geralmente appsettings.json). Certifique-se de que as credenciais do banco de dados, como o nome do banco de dados, nome de usuário e senha, estejam corretamente configuradas.
 
 # Instalação
   - abrir terminal do diretorio onde o Projeto esta.
