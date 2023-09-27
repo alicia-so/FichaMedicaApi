@@ -15,29 +15,30 @@ public class FichaMedicaController : ControllerBase
 {
     private readonly IMapper _mapper;
     private readonly SistemaContext _context;
-    public FichaMedicaController(IMapper mapper, SistemaContext context){
+    public FichaMedicaController(IMapper mapper, SistemaContext context)
+    {
         _mapper = mapper;
         _context = context;
     }
-    
+
 
     [HttpPost]
     [Route("Create")]
     [Authorize(Roles = "Medico")]
-    public IActionResult CreateFicha([FromBody]CreateFichaMedicaDto dto)
+    public IActionResult CreateFicha([FromBody] CreateFichaMedicaDto dto)
     {
         var ficha = _mapper.Map<FichaMedica>(dto);
-        
+
         _context.Fichas.Add(ficha);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(RecuperarPorId), new { id = ficha.Id}, dto);
+        return CreatedAtAction(nameof(RecuperarPorId), new { id = ficha.Id }, dto);
     }
 
-    
+
     [HttpGet]
     [Route("GetById")]
     [Authorize(Roles = "Medico")]
-    public ReadFichaMedicaDto RecuperarPorId([FromQuery]string Id)
+    public ReadFichaMedicaDto RecuperarPorId([FromQuery] string Id)
     {
         var ficha = _context.Fichas.FirstOrDefault(p => p.Id.Equals(Id));
         return _mapper.Map<ReadFichaMedicaDto>(ficha);
@@ -61,14 +62,30 @@ public class FichaMedicaController : ControllerBase
         return _mapper.Map<ReadFichaMedicaDto>(ficha);
     }
 
+    [HttpGet]
+    [Route("GetAllFromPaciente")]
+    [Authorize]
+    public ActionResult<dynamic> GetAllFromPaciente([FromQuery] string Id)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(x => x.Type.Equals("Id"));
+        string userId = "";
+        if (userIdClaim != null)
+        {
+            userId = userIdClaim.Value;
+        }
+        if (!userId.Equals(Id))
+            return NotFound(new { message = "Paciente logado, n�o pode consultar fichas de outros pacientes." });
 
+        var fichas = _context.Fichas.Where(p => p.PacienteId.Equals(Id)).ToList();
+        return _mapper.Map<List<ReadFichaMedicaDto>>(fichas);
+    }
 
     [HttpGet("GetAll")]
     [Authorize(Roles = "Medico")]
-    public IEnumerable<ReadFichaMedicaDto> GetAll([FromQuery]int skyp=0, [FromQuery]int take=50)
+    public IEnumerable<ReadFichaMedicaDto> GetAll([FromQuery] int skyp = 0, [FromQuery] int take = 50)
     {
-          var fichas = _context.Fichas.Skip(skyp).Take(take).ToList();
-          return _mapper.Map<List<ReadFichaMedicaDto>>(fichas);
+        var fichas = _context.Fichas.Skip(skyp).Take(take).ToList();
+        return _mapper.Map<List<ReadFichaMedicaDto>>(fichas);
     }
 
     [HttpDelete("DeleteFicha")]
