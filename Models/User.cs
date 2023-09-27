@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace WebApp.Models;
 
 public class User
@@ -16,7 +17,7 @@ public class User
 
     public string FullName {get; set;}
 
-    [Required(ErrorMessage = "E-mail é obrigatorio")]
+    [Required(ErrorMessage = "E-mail é obrigatorio")] 
     public required string Email { get; set; }
 
     public required string Password { get; set; }
