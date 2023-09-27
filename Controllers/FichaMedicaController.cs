@@ -55,7 +55,7 @@ public class FichaMedicaController : ControllerBase
             userId = userIdClaim.Value;
         }
         if (!userId.Equals(IdPaciente))
-            return NotFound(new { message = "Paciente logado, não pode consultar fichas de outros pacientes." });
+            return NotFound(new { message = "Paciente logado, nï¿½o pode consultar fichas de outros pacientes." });
 
         var ficha = _context.Fichas.FirstOrDefault(p => p.PacienteId.Equals(IdPaciente));
         return _mapper.Map<ReadFichaMedicaDto>(ficha);
@@ -65,10 +65,10 @@ public class FichaMedicaController : ControllerBase
 
     [HttpGet("GetAll")]
     [Authorize(Roles = "Medico")]
-    public IEnumerable<ReadUserDto> GetAll([FromQuery]int skyp=0, [FromQuery]int take=50)
+    public IEnumerable<ReadFichaMedicaDto> GetAll([FromQuery]int skyp=0, [FromQuery]int take=50)
     {
-        var usuarios = _context.Users.Skip(skyp).Take(take).ToList();
-        return _mapper.Map<List<ReadUserDto>>(usuarios);
+          var fichas = _context.Fichas.Skip(skyp).Take(take).ToList();
+          return _mapper.Map<List<ReadFichaMedicaDto>>(fichas);
     }
 
     [HttpDelete("DeleteFicha")]
@@ -79,13 +79,13 @@ public class FichaMedicaController : ControllerBase
 
         if (ficha == null)
         {
-            return NotFound(new { message = "Ficha médica não encontrada." });
+            return NotFound(new { message = "Ficha mï¿½dica nï¿½o encontrada." });
         }
 
         _context.Fichas.Remove(ficha);
         _context.SaveChanges();
 
-        return Ok(new { message = "Ficha médica deletada com sucesso." });
+        return Ok(new { message = "Ficha mï¿½dica deletada com sucesso." });
     }
 
     [HttpPut("EditFicha")]
@@ -96,7 +96,7 @@ public class FichaMedicaController : ControllerBase
 
         if (ficha == null)
         {
-            return NotFound(new { message = "Ficha médica não encontrada." });
+            return NotFound(new { message = "Ficha mï¿½dica nï¿½o encontrada." });
         }
 
         if (!string.IsNullOrWhiteSpace(dto.Descricao))
@@ -126,7 +126,7 @@ public class FichaMedicaController : ControllerBase
 
         _context.SaveChanges();
 
-        return Ok(new { message = "Ficha médica atualizada com sucesso." });
+        return Ok(new { message = "Ficha mï¿½dica atualizada com sucesso." });
     }
 
 
