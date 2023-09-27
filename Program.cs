@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 /* conexão com o banco */
 var connectionString = builder.Configuration.GetConnectionString("SistemaConnection");
 builder.Services.AddDbContext<SistemaContext>(opt => opt.UseLazyLoadingProxies().UseMySql(
-    connectionString,ServerVersion.AutoDetect(connectionString)
+    connectionString, ServerVersion.AutoDetect(connectionString)
 ));
 
 // configurando AutoMapper no Projeto
@@ -23,10 +23,12 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 //builder.Services.AddScoped<UsuarioService>();
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);
-builder.Services.AddAuthentication(x => {
+builder.Services.AddAuthentication(x =>
+{
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x => {
+}).AddJwtBearer(x =>
+{
     x.RequireHttpsMetadata = false;
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
@@ -41,10 +43,11 @@ builder.Services.AddAuthentication(x => {
 var MyAllowSpecificOrigins = "CheffMix_FrontEnd";
 builder.Services.AddCors(options =>
     {
-         options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy => { 
-                        policy.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyOrigin();
-                      });
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+                     policy =>
+                     {
+                         policy.WithOrigins("http://localhost").AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+                     });
     });
 
 builder.Services.AddEndpointsApiExplorer();
